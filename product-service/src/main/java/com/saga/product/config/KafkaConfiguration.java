@@ -11,24 +11,25 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+
 @Configuration
 public class KafkaConfiguration {
 
-  @Value("${kafka.topic.name.product.topic}")
-  private String productTopic;
+    @Value("${kafka.topic.name.product.topic}")
+    private String productTopic;
 
-  @Bean
-  public KafkaTemplate<String, Object> kafkaTemplate(
-      ProducerFactory<String, Object> producerFactory) {
-    return new KafkaTemplate<>(producerFactory);
-  }
+    @Bean
+    public KafkaTemplate<String, Object> kafkaTemplate(
+            ProducerFactory<String, Object> producerFactory) {
+        return new KafkaTemplate<>(producerFactory);
+    }
 
-  @Bean
-  public NewTopic productTopic() {
-    return TopicBuilder.name(this.productTopic)
-        .partitions(PARTITIONS)
-        .replicas(REPLICAS)
-        .build();
-  }
+    @Bean
+    public NewTopic productTopic() {
+        return TopicBuilder.name(this.productTopic)
+                .partitions(PARTITIONS)
+                .replicas(REPLICAS)
+                .build();
+    }
 
 }
