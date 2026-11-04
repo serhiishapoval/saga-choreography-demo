@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class KafkaConstants {
 
-  public final static Integer REPLICAS = 3;
+  public static final Integer REPLICAS = 3;
 
-  public final static Integer PARTITIONS = 3;
+  public static final Integer PARTITIONS = 3;
 }

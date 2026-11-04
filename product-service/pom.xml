@@ -17,7 +17,7 @@
     <description>Service for handling product operations</description>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>27</java.version>
     </properties>
     <dependencies>
         <dependency>

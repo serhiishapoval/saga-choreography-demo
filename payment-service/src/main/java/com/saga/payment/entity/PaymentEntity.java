@@ -15,8 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PaymentEntity {
 
-  @Id
-  private UUID paymentId;
+  @Id private UUID paymentId;
   private UUID productId;
   private UUID orderId;
   private Double amount;

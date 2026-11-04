@@ -39,17 +39,18 @@ public class OrderHandler {
     log.info("handleOrderAction. Received CreateOrderAction: {} ", action);
 
     try {
-      final OrderEntity createdOrder = this.orderService.createOrder(action.getProductId(),
-          action.getQuantity());
+      final OrderEntity createdOrder =
+          this.orderService.createOrder(action.getProductId(), action.getQuantity());
 
-      final ProcessPaymentAction processPaymentAction = ProcessPaymentAction.builder()
-          .operationId(action.getOperationId())
-          .amountToBePaid(action.getQuantity().doubleValue() * 1.5D)
-          .orderId(createdOrder.getOrderId())
-          .productId(action.getProductId())
-          .creditCardNumber(CreditCardUtils.getCreditCardNumber())
-          .quantity(action.getQuantity())
-          .build();
+      final ProcessPaymentAction processPaymentAction =
+          ProcessPaymentAction.builder()
+              .operationId(action.getOperationId())
+              .amountToBePaid(action.getQuantity().doubleValue() * 1.5D)
+              .orderId(createdOrder.getOrderId())
+              .productId(action.getProductId())
+              .creditCardNumber(CreditCardUtils.getCreditCardNumber())
+              .quantity(action.getQuantity())
+              .build();
 
       this.kafkaTemplate.send(this.paymentTopic, processPaymentAction);
 
@@ -65,7 +66,7 @@ public class OrderHandler {
     try {
       this.orderService.cancelOrder(action.getOrderId());
     } catch (Exception e) {
-      //HERE WE SHOULD THROW A RETRYABLE EXCEPTION
+      // HERE WE SHOULD THROW A RETRYABLE EXCEPTION
     }
     this.rollbackProduct(action.getOperationId(), action.getProductId(), action.getQuantity());
   }
@@ -76,17 +77,18 @@ public class OrderHandler {
     try {
       this.orderService.payOrder(action.getOrderId());
     } catch (Exception e) {
-      //HERE WE SHOULD THROW A RETRYABLE EXCEPTION
+      // HERE WE SHOULD THROW A RETRYABLE EXCEPTION
     }
   }
 
-  private void rollbackProduct(final UUID operationId, final UUID productId,
-      final Integer quantity) {
-    final ProductRollbackAction productRollbackAction = ProductRollbackAction.builder()
-        .operationId(operationId)
-        .productId(productId)
-        .quantity(quantity)
-        .build();
+  private void rollbackProduct(
+      final UUID operationId, final UUID productId, final Integer quantity) {
+    final ProductRollbackAction productRollbackAction =
+        ProductRollbackAction.builder()
+            .operationId(operationId)
+            .productId(productId)
+            .quantity(quantity)
+            .build();
 
     this.kafkaTemplate.send(this.productTopic, productRollbackAction);
 

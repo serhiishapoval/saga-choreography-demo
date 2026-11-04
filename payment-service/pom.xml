@@ -15,7 +15,7 @@
     <description>payment-service</description>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>27</java.version>
     </properties>
 
     <dependencies>

@@ -1,7 +1,6 @@
 package com.saga.order.entity;
 
 public enum OrderStatus {
-
   NEW("NEW"),
   PAID("PAID"),
   CANCELLED("CANCELLED");
@@ -15,5 +14,4 @@ public enum OrderStatus {
   public String getStatus() {
     return status;
   }
-
 }

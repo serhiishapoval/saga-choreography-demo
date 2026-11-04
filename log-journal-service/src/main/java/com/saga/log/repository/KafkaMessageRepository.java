@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KafkaMessageRepository extends JpaRepository<KafkaMessageEntity, Long> {
-  
+
   List<KafkaMessageEntity> findByOperationId(UUID operationId);
-  
+
   List<KafkaMessageEntity> findByTopic(String topic);
-  
+
   List<KafkaMessageEntity> findByMessageType(String messageType);
-  
+
   List<KafkaMessageEntity> findByServiceSource(String serviceSource);
 }

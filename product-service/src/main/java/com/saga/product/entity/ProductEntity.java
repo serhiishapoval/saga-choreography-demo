@@ -15,8 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProductEntity {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
   private String name;
   private Integer quantity;
 }

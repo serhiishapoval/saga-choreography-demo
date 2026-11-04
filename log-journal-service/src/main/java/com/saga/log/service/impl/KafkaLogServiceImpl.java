@@ -21,8 +21,8 @@ public class KafkaLogServiceImpl implements KafkaLogService {
   private final ObjectMapper objectMapper;
 
   @Override
-  public void logKafkaMessage(final String topic, final Object message,
-      final String serviceSource) {
+  public void logKafkaMessage(
+      final String topic, final Object message, final String serviceSource) {
     try {
       String messageType = message.getClass().getSimpleName();
       UUID operationId = null;
@@ -33,19 +33,24 @@ public class KafkaLogServiceImpl implements KafkaLogService {
 
       final String messageContent = objectMapper.writeValueAsString(message);
 
-      final KafkaMessageEntity kafkaMessageEntity = KafkaMessageEntity.builder()
-          .topic(topic)
-          .messageType(messageType)
-          .operationId(operationId)
-          .messageContent(messageContent)
-          .timestamp(LocalDateTime.now())
-          .serviceSource(serviceSource)
-          .build();
+      final KafkaMessageEntity kafkaMessageEntity =
+          KafkaMessageEntity.builder()
+              .topic(topic)
+              .messageType(messageType)
+              .operationId(operationId)
+              .messageContent(messageContent)
+              .timestamp(LocalDateTime.now())
+              .serviceSource(serviceSource)
+              .build();
 
       this.kafkaMessageRepository.save(kafkaMessageEntity);
 
-      log.info("Logged Kafka message: topic={}, messageType={}, operationId={}, serviceSource={}",
-          topic, messageType, operationId, serviceSource);
+      log.info(
+          "Logged Kafka message: topic={}, messageType={}, operationId={}, serviceSource={}",
+          topic,
+          messageType,
+          operationId,
+          serviceSource);
     } catch (Exception e) {
       log.error("Error logging Kafka message: {}", e.getMessage(), e);
     }

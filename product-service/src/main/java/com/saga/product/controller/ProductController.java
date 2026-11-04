@@ -24,11 +24,12 @@ public class ProductController {
   @RequestMapping(method = RequestMethod.POST, path = "/product/buy")
   public ResponseEntity<Void> getProducts(@RequestBody final BuySomethingRequest request) {
 
-    final ProductReserveAction productReserveAction = ProductReserveAction.builder()
-        .operationId(UUID.randomUUID())
-        .quantity(request.getQuantity())
-        .productId(request.getProductId())
-        .build();
+    final ProductReserveAction productReserveAction =
+        ProductReserveAction.builder()
+            .operationId(UUID.randomUUID())
+            .quantity(request.getQuantity())
+            .productId(request.getProductId())
+            .build();
 
     this.kafkaTemplate.send(this.productTopic, productReserveAction);
 

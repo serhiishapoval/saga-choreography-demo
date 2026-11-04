@@ -2,7 +2,6 @@ package com.saga.dto.product;
 
 import com.saga.dto.trace.BaseTracing;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -25,10 +25,6 @@ public class KafkaConfiguration {
 
   @Bean
   public NewTopic paymentTopic() {
-    return TopicBuilder.name(this.paymentTopic)
-        .partitions(PARTITIONS)
-        .replicas(REPLICAS)
-        .build();
+    return TopicBuilder.name(this.paymentTopic).partitions(PARTITIONS).replicas(REPLICAS).build();
   }
-
 }

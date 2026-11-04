@@ -15,5 +15,4 @@ public interface KafkaLogService {
   List<KafkaMessageEntity> getMessagesByType(String messageType);
 
   List<KafkaMessageEntity> getMessagesByServiceSource(String serviceSource);
-
 }
