@@ -32,6 +32,7 @@ Every purchase carries an `operationId` UUID through all the messages, so the wh
 - [Data model and seed data](#data-model-and-seed-data)
 - [Configuration reference](#configuration-reference)
 - [Running locally](#running-locally)
+- [Running the tests](#running-the-tests)
 - [Trying it out](#trying-it-out)
 - [Build notes](#build-notes)
 - [Known limitations](#known-limitations)
@@ -139,6 +140,7 @@ Each business service follows the same layering: `kafka` (listener) → `service
 - Spring Boot 3.4.4 (parent POM), with Spring Web, Spring Data JPA, Spring for Apache Kafka 3.3.4
 - H2 2.3.232 (in-memory)
 - Lombok 1.18.48 (`@SuperBuilder` on the message classes)
+- JUnit 6.1.3 and Mockito 5.24.0 for unit tests (pinned in the parent POM)
 - OpenTelemetry SDK 1.49.0 and the Jaeger exporter 1.34.1 (log-journal only)
 - Maven (multi-module)
 
@@ -405,6 +407,19 @@ mvn -pl payment-service spring-boot:run
 
 ---
 
+## Running the tests
+
+```bash
+mvn test                              # all modules
+mvn -pl order-service -am test        # one module, with its dependencies
+```
+
+Each service has unit tests in `src/test/java`. They mock `KafkaTemplate`, the repositories and the OpenTelemetry tracer, so no Kafka cluster, database or running service is needed.
+
+The tests cover the Kafka handlers, the services, the product controller and the `log-journal-service` listener and log service. `PaymentServiceImplTest` asserts the current behaviour, where `pay` always throws. When the success branch is restored, that test must be updated.
+
+---
+
 ## Trying it out
 
 1. Open the H2 consoles (optional):
@@ -438,7 +453,8 @@ Tracing a single purchase in Jaeger: search for the service `log-journal-service
 - Lombok is **1.18.48**. Version 1.18.36 fails with a `TypeTag :: UNKNOWN` error on JDK 26 and later.
 - `mvn clean install` builds all modules successfully on JDK 27.
 - Code is formatted with **google-java-format** (v2.0.0 at the time of writing).
-- There are no unit or integration tests in the repository.
+- Unit tests use JUnit 6 and Mockito 5, pinned in the parent POM. `byte-buddy.version` is pinned to 1.18.17 for Java 27 support.
+- There are no integration tests.
 
 ---
 
@@ -485,4 +501,4 @@ Tracing a single purchase in Jaeger: search for the service `log-journal-service
 - `ProductController.getProducts` is misnamed. It sends a reserve action and does not return products.
 - `spring.application.name` is `PaymentService` in payment-service, while the other services use lowercase names.
 - Message keys are `null`, so messages for the same operation may be processed out of order when a topic has several partitions.
-- There are no tests, no CI and no containerisation.
+- No integration tests, no CI and no containerisation. The unit tests do not check Kafka serialisation or the real topic wiring.

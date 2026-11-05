@@ -10,12 +10,14 @@ This service is responsible for logging all Kafka messages sent between services
 
 ## API Endpoints
 
-The service exposes the following REST endpoints:
+The following REST endpoints are planned:
 
 - `GET /api/logs/operation/{operationId}` - Get all logs for a specific operation
 - `GET /api/logs/topic/{topic}` - Get all logs for a specific Kafka topic
 - `GET /api/logs/type/{messageType}` - Get all logs for a specific message type
 - `GET /api/logs/service/{serviceSource}` - Get all logs from a specific service
+
+> **Note:** these endpoints are not implemented yet. The code has no controller for them. The query methods exist in `KafkaLogService` and are covered by unit tests.
 
 ## Database Schema
 
@@ -53,4 +55,14 @@ The service is configured with the following properties:
 
 To use this service, simply start it along with the other services in the saga choreography demo. It will automatically log all Kafka messages.
 
-To query the logs, use the REST API endpoints described above.
+To query the logs, use the repository or service layer. The REST endpoints described above are not implemented yet.
+
+## Running the tests
+
+From the `saga-choreography-demo` root:
+
+```bash
+mvn -pl log-journal-service -am test
+```
+
+The unit tests cover `KafkaLogListener` (the three topic listeners, tracing spans, null payloads and span error recording) and `KafkaLogServiceImpl` (message storage, serialisation failures and the query methods). They mock the OpenTelemetry tracer and the repository, so Kafka, Jaeger and the H2 database are not needed.
